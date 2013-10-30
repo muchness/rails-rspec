@@ -3,7 +3,7 @@ class Post < ActiveRecord::Base
 
   scope :recent, order: "created_at DESC", limit: 5
 
-  before_save :titleize_title
+  before_save :titleize_title, :slugify_title
 
   validates_presence_of :title, :content
 
@@ -11,5 +11,9 @@ class Post < ActiveRecord::Base
 
   def titleize_title
     self.title = title.titleize
+  end
+
+  def slugify_title
+    self.slug = self.title.downcase.gsub(' ','-').gsub(/[?,.,!]/,'')
   end
 end
